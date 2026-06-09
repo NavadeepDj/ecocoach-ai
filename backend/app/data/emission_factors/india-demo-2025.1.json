@@ -1,0 +1,46 @@
+{
+  "id": "india-demo-2025.1",
+  "name": "India-default demonstration factors",
+  "effective_date": "2025-01-01",
+  "geography": "IN",
+  "monthly_target_kg_co2e": 166.67,
+  "transport_kg_co2e_per_passenger_km": {
+    "car": 0.192,
+    "bus": 0.105,
+    "train": 0.041,
+    "flight": 0.15
+  },
+  "electricity_kg_co2e_per_kwh": 0.716,
+  "food_monthly_kg_co2e": {
+    "vegan": 100.0,
+    "vegetarian": 130.0,
+    "mixed": 180.0,
+    "meat_heavy": 250.0
+  },
+  "waste_monthly_kg_co2e": {
+    "low": 8.0,
+    "average": 15.0,
+    "high": 28.0
+  },
+  "sources": [
+    {
+      "name": "Central Electricity Authority CO2 Baseline Database for the Indian Power Sector",
+      "url": "https://cea.nic.in/cdm-co2-baseline-database/"
+    },
+    {
+      "name": "UK Government greenhouse gas reporting conversion factors",
+      "url": "https://www.gov.uk/government/collections/government-conversion-factors-for-company-reporting"
+    },
+    {
+      "name": "US EPA Waste Reduction Model guidance",
+      "url": "https://www.epa.gov/warm"
+    }
+  ],
+  "caveats": [
+    "All results are estimates rather than a complete lifecycle inventory.",
+    "Transport factors are representative passenger-mode values and do not model vehicle, fuel, or occupancy details.",
+    "Food and waste values are coarse behavioral proxies for relative coaching.",
+    "Electricity impact varies by grid region, supplier, and time."
+  ]
+}
+

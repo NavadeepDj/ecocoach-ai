@@ -1,0 +1,2 @@
+"""EcoCoach AI backend."""
+

@@ -1,0 +1,16 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.py[cod]
+*.db
+node_modules/
+dist/
+.DS_Store
+
+# Credentials and Database
+*-adminsdk-*.json
+mock_firebase_db.json
+.env.local
+.env.*.local
