@@ -25,6 +25,7 @@ export interface FootprintResult {
   caveats: string[];
   explanation: string[];
   created_at?: string;
+  recommendations: Recommendation[];
 }
 
 export interface ComparisonResult {
@@ -32,5 +33,21 @@ export interface ComparisonResult {
   total_users: number;
   distribution: Record<string, number>;
 }
+
+export interface Recommendation {
+  id: string;
+  title: string;
+  description: string;
+  estimated_savings: number;
+  difficulty: "easy" | "medium" | "hard";
+  rationale: string;
+  category: "transport" | "electricity" | "food" | "waste";
+}
+
+export interface ChatMessage {
+  role: "user" | "model";
+  text: string;
+}
+
 
 

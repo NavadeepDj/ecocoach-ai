@@ -1,4 +1,4 @@
-import type { ComparisonResult, FootprintResult, LifestyleProfile } from "./types";
+import type { ChatMessage, ComparisonResult, FootprintResult, LifestyleProfile } from "./types";
 
 export async function calculateFootprint(
   profile: LifestyleProfile,
@@ -68,5 +68,26 @@ export async function getFootprintComparison(
 
   return response.json() as Promise<ComparisonResult>;
 }
+
+export async function sendChatMessage(
+  history: ChatMessage[],
+  footprint: FootprintResult,
+): Promise<string> {
+  const response = await fetch("/api/coach/chat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ history, footprint }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not communicate with the coach.");
+  }
+
+  const data = await response.json() as { reply: string };
+  return data.reply;
+}
+
 
 

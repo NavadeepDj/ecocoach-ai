@@ -1,6 +1,7 @@
 from app.schemas.footprint import CategoryBreakdown, FootprintResult
 from app.schemas.profile import LifestyleProfile
 from app.services.factor_catalog import FactorCatalog
+from app.services.recommendation import RecommendationEngine
 
 WEEKS_PER_MONTH = 52 / 12
 
@@ -8,6 +9,7 @@ WEEKS_PER_MONTH = 52 / 12
 class CarbonCalculator:
     def __init__(self, catalog: FactorCatalog):
         self.catalog = catalog
+        self.recommendation_engine = RecommendationEngine()
 
     def calculate(self, profile: LifestyleProfile) -> FootprintResult:
         factors = self.catalog.data
@@ -41,6 +43,9 @@ class CarbonCalculator:
         breakdown = CategoryBreakdown(
             **{category: round(value, 2) for category, value in raw_breakdown.items()}
         )
+
+        recommendations = self.recommendation_engine.generate(profile, breakdown, factors)
+
         return FootprintResult(
             total=round(total, 2),
             score=score,
@@ -56,6 +61,7 @@ class CarbonCalculator:
                 "Food and waste currently use broad monthly behavioral proxies.",
                 f"The score compares this estimate with a {target:.2f} kg CO2e monthly target.",
             ],
+            recommendations=recommendations,
         )
 
     @staticmethod

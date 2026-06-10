@@ -1,6 +1,7 @@
 import os
 import json
 import logging
+import datetime
 from typing import Any
 from pathlib import Path
 
@@ -63,9 +64,9 @@ class FirebaseService:
         In mock mode, parse simple format 'mock-token-{uid}' or return static mock user.
         """
         if MOCK_MODE:
-            uid = "mock-uid-123"
-            if token.startswith("mock-token-"):
-                uid = token.replace("mock-token-", "")
+            if not token.startswith("mock-token-"):
+                raise ValueError("Invalid mock token format")
+            uid = token.replace("mock-token-", "")
             
             # Save mock user to mock database
             db = _load_mock_db()
@@ -96,8 +97,7 @@ class FirebaseService:
         """
         Save a user's footprint to history and update their latest footprint.
         """
-        import datetime
-        timestamp = datetime.datetime.utcnow().isoformat()
+        timestamp = datetime.datetime.now(datetime.UTC).isoformat()
         record = {
             **footprint_data,
             "uid": uid,
