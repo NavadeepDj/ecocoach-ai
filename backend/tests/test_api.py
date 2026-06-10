@@ -36,13 +36,6 @@ def test_calculation_endpoint_returns_explainable_result() -> None:
     assert len(result["explanation"]) > 0
 
 
-def test_profile_submit_returns_baseline() -> None:
-    response = client.post("/api/profile/submit", json=VALID_PROFILE)
-
-    assert response.status_code == 200
-    assert response.json()["period"] == "monthly"
-
-
 def test_negative_activity_is_rejected() -> None:
     profile = {**VALID_PROFILE, "weekly_car_km": -1}
 

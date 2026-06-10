@@ -6,6 +6,7 @@ import {
   signOut,
   onAuthStateChanged,
   type User,
+  type Auth,
 } from "firebase/auth";
 
 // Check if Vite environment variables are present
@@ -20,8 +21,8 @@ const firebaseConfig = {
 
 export const isMockMode = !firebaseConfig.apiKey;
 
-let auth: any = null;
-let googleProvider: any = null;
+let auth: Auth | null = null;
+let googleProvider: GoogleAuthProvider | null = null;
 
 if (!isMockMode) {
   try {
@@ -63,6 +64,9 @@ export async function signInWithGoogle(): Promise<UserProfile> {
     return mockUser;
   }
 
+  if (!auth || !googleProvider) {
+    throw new Error("Firebase auth not initialized");
+  }
   const result = await signInWithPopup(auth, googleProvider);
   return {
     uid: result.user.uid,
@@ -79,6 +83,9 @@ export async function logout(): Promise<void> {
     return;
   }
 
+  if (!auth) {
+    throw new Error("Firebase auth not initialized");
+  }
   await signOut(auth);
 }
 
@@ -93,6 +100,9 @@ export function onAuthChanged(callback: (user: UserProfile | null) => void): () 
     };
   }
 
+  if (!auth) {
+    return () => {};
+  }
   return onAuthStateChanged(auth, (firebaseUser: User | null) => {
     if (firebaseUser) {
       callback({
@@ -112,6 +122,6 @@ export async function getAuthToken(): Promise<string> {
     return user ? `mock-token-${user.uid}` : "";
   }
 
-  if (!auth.currentUser) return "";
+  if (!auth || !auth.currentUser) return "";
   return auth.currentUser.getIdToken();
 }

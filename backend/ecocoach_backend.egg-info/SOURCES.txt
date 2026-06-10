@@ -11,7 +11,10 @@ app/schemas/footprint.py
 app/schemas/profile.py
 app/services/__init__.py
 app/services/calculator.py
+app/services/coach.py
 app/services/factor_catalog.py
+app/services/firebase.py
+app/services/recommendation.py
 ecocoach_backend.egg-info/PKG-INFO
 ecocoach_backend.egg-info/SOURCES.txt
 ecocoach_backend.egg-info/dependency_links.txt
@@ -19,3 +22,5 @@ ecocoach_backend.egg-info/requires.txt
 ecocoach_backend.egg-info/top_level.txt
 tests/test_api.py
 tests/test_calculator.py
+tests/test_coach.py
+tests/test_recommendation.py
