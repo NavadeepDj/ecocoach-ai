@@ -1,15 +1,31 @@
+/**
+ * @module App
+ * @description Root application component and global state orchestrator.
+ * Manages authentication, assessment step navigation, footprint
+ * calculation, and history persistence. Delegates rendering to
+ * specialised child components via the barrel export.
+ */
 import { useState, useEffect, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react";
 import { calculateFootprint, saveFootprint, getFootprintHistory } from "./api";
 import { signInWithGoogle, logout, onAuthChanged, getAuthToken, type UserProfile } from "./firebase";
 import type { FootprintResult, LifestyleProfile } from "./types";
 
-import { Brand, AuthControl } from "./components/Header";
-import { Dashboard } from "./components/Dashboard";
-import { HistoryModal } from "./components/HistoryModal";
-import { ChatAssistant } from "./components/ChatAssistant";
-import { steps, Welcome, TravelStep, EnergyStep, LifestyleStep, Review, Stat } from "./components/Questionnaire";
-import { Progress } from "./components/Questionnaire";
+import {
+  Brand,
+  AuthControl,
+  Dashboard,
+  HistoryModal,
+  ChatAssistant,
+  steps,
+  Welcome,
+  TravelStep,
+  EnergyStep,
+  LifestyleStep,
+  Review,
+  Stat,
+  Progress,
+} from "./components";
 
 const initialProfile: LifestyleProfile = {
   weekly_car_km: 0,
@@ -147,7 +163,7 @@ function App() {
         Skip to main content
       </a>
       <main id="main-assessment-content" className="min-h-screen px-4 py-4 md:px-8 md:py-7">
-        <header className="mx-auto flex max-w-6xl items-center justify-between">
+        <nav aria-label="Assessment navigation" className="mx-auto flex max-w-6xl items-center justify-between">
           <Brand />
           <div className="flex items-center gap-3">
             <AuthControl
@@ -160,7 +176,7 @@ function App() {
               India demo factors
             </span>
           </div>
-        </header>
+        </nav>
 
         <section className="mx-auto grid max-w-6xl gap-6 py-8 lg:grid-cols-[0.72fr_1.28fr] lg:py-14">
           <aside className="hero-panel rounded-[2rem] p-7 text-white md:p-10">

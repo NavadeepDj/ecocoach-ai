@@ -1,4 +1,9 @@
-import { History, ChevronRight } from "lucide-react";
+/**
+ * @module components/HistoryModal
+ * @description Full-screen modal overlay listing the user's saved
+ * footprint assessment history with timestamps and totals.
+ */
+import { History, ChevronRight, X } from "lucide-react";
 import type { FootprintResult } from "../types";
 
 interface HistoryModalProps {

@@ -1,6 +1,12 @@
+/**
+ * @module components/Header
+ * @description Shared header elements: the EcoCoach brand logo and
+ * the authentication control strip (sign in / user menu).
+ */
 import { Leaf, History, LogOut, User } from "lucide-react";
 import type { UserProfile } from "../firebase";
 
+/** EcoCoach brand logo with a leaf icon. */
 export function Brand() {
   return (
     <div className="flex items-center gap-3">
@@ -24,6 +30,11 @@ interface AuthControlProps {
   onViewHistory: () => void;
 }
 
+/**
+ * Authentication control strip showing sign-in button for anonymous
+ * users or the user avatar, history link, and sign-out button for
+ * authenticated users.
+ */
 export function AuthControl({
   user,
   onSignIn,

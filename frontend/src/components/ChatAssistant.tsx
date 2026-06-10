@@ -1,12 +1,29 @@
+/**
+ * @module components/ChatAssistant
+ * @description Floating chat widget that lets users converse with
+ * the EcoCoach AI assistant. Provides context-aware responses based
+ * on the user's footprint result, with quick-suggestion chips.
+ */
 import { useState, useEffect, useRef } from "react";
 import { MessageSquare, Leaf, X, Send } from "lucide-react";
 import { sendChatMessage } from "../api";
 import type { ChatMessage, FootprintResult } from "../types";
 
 interface ChatAssistantProps {
+  /** The user's footprint result, or null if not yet calculated. */
   result: FootprintResult | null;
 }
 
+/**
+ * Floating chat widget anchored to the bottom-right of the viewport.
+ *
+ * When collapsed, shows a pill-shaped "Chat with Coach" button.
+ * When expanded, renders a full conversation panel with message
+ * history, typing indicators, suggested questions, and a text input.
+ *
+ * Messages are forwarded to the `/api/coach/chat` endpoint along with
+ * the user's footprint context so Gemini can provide personalised advice.
+ */
 export function ChatAssistant({ result }: ChatAssistantProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);

@@ -1,4 +1,10 @@
-import os
+"""Firebase Admin SDK integration with automatic local mock fallback.
+
+When ``ECOCOACH_FIREBASE_SERVICE_ACCOUNT`` is configured (JSON string or
+file path), full Firestore persistence and Firebase Auth are used.
+Otherwise, a lightweight JSON-file mock database is used so the
+application can run locally without any cloud credentials.
+"""
 import json
 import logging
 import datetime
@@ -56,6 +62,7 @@ except Exception as e:
 MOCK_DB_PATH = Path(__file__).resolve().parent.parent.parent / "mock_firebase_db.json"
 
 def _load_mock_db() -> dict[str, Any]:
+    """Load the local JSON mock database, creating it if it doesn't exist."""
     if not MOCK_DB_PATH.exists():
         initial_data = {
             "users": {},
@@ -70,6 +77,7 @@ def _load_mock_db() -> dict[str, Any]:
         return {"users": {}, "footprints": [], "latest_footprints": {}}
 
 def _save_mock_db(data: dict[str, Any]) -> None:
+    """Persist the mock database to disk as formatted JSON."""
     MOCK_DB_PATH.write_text(json.dumps(data, indent=2), encoding="utf-8")
 
 

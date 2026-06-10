@@ -1,3 +1,9 @@
+/**
+ * @module components/Questionnaire
+ * @description Multi-step carbon footprint questionnaire components.
+ * Includes the Welcome screen, Travel/Energy/Lifestyle input steps,
+ * the Review summary, and shared UI primitives (Progress, NumberField, etc.).
+ */
 import { useState, useEffect, type Dispatch, type SetStateAction, type ReactNode } from "react";
 import { CloudSun, Footprints, Check, Sparkles, Car, Bus, Train, Plane, Bolt, Info, Utensils, Recycle } from "lucide-react";
 import type { LifestyleProfile, DietType, WasteLevel } from "../types";

@@ -90,3 +90,34 @@ docs/      Product plan, architecture decisions, and calculation methodology
    ```powershell
    npm run build
    ```
+
+5. **Run Frontend Tests**:
+   ```powershell
+   npm run test
+   ```
+
+---
+
+## Hackathon Problem Statement Alignment
+
+This project directly addresses the hackathon problem statement:
+
+1. **Meaningful Actionability** — Breaks complex global carbon emission problems into relatable, everyday user habits. The deterministic engine provides baseline measurements and identifies the user's largest carbon contributor.
+2. **Context-Aware Recommendations** — Gemini AI leverages the user's specific lifestyle profile (diet, travel, energy) to recommend targeted emission-reduction strategies, calculating precise monthly kilogram savings for each tip.
+3. **Transparent Coaching** — EcoCoach avoids hallucinated "AI math." Calculations and assumptions are explicitly presented. The AI layer acts strictly as a coach to explain data and provide actionable advice.
+4. **Resiliency & Fallbacks** — The system features a local fallback rule-engine. If Gemini fails or times out, the app gracefully degrades to deterministic recommendations using a prioritised model hierarchy.
+
+---
+
+## Quality & Testing
+
+This project is optimised and audited against five key quality metrics:
+
+| Metric | Approach |
+|---|---|
+| **Security** | Zero credentials in Git, sanitised auth errors, strict Pydantic input validation, explicit CORS origin/method/header whitelisting, bounded chat histories. |
+| **Code Quality** | Modular React components (`Dashboard`, `ChatAssistant`, `Questionnaire`, `BreakdownChart`, `CommunityComparison`, `RecommendationList`, `ImpactCalculator`), JSDoc on all modules, barrel exports, ErrorBoundary, typed Firebase config. |
+| **Efficiency** | Cached Gemini clients, `@lru_cache` settings, clean Firestore subcollection queries. |
+| **Testing** | 23 backend Pytest tests (API, calculator, coach fallback, Firebase mock, recommendations). Frontend Vitest + React Testing Library tests. |
+| **Accessibility** | `lang="en"`, skip links, `<nav>` landmarks, `aria-live="polite"` on chat, `role="progressbar"` on charts, `role="checkbox"` on recommendations, full keyboard navigation. |
+

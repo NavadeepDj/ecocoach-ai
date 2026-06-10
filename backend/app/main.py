@@ -1,3 +1,5 @@
+"""FastAPI application entry point for EcoCoach AI."""
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -13,8 +15,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins if isinstance(settings.allowed_origins, list) else [settings.allowed_origins],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 app.include_router(api_router, prefix=settings.api_prefix)
 
