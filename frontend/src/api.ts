@@ -1,9 +1,11 @@
 import type { ChatMessage, ComparisonResult, FootprintResult, LifestyleProfile } from "./types";
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+
 export async function calculateFootprint(
   profile: LifestyleProfile,
 ): Promise<FootprintResult> {
-  const response = await fetch("/api/footprint/calculate", {
+  const response = await fetch(`${API_BASE_URL}/api/footprint/calculate`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(profile),
@@ -20,7 +22,7 @@ export async function saveFootprint(
   result: FootprintResult,
   token: string,
 ): Promise<{ status: string }> {
-  const response = await fetch("/api/footprint/save", {
+  const response = await fetch(`${API_BASE_URL}/api/footprint/save`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -37,7 +39,7 @@ export async function saveFootprint(
 }
 
 export async function getFootprintHistory(token: string): Promise<FootprintResult[]> {
-  const response = await fetch("/api/footprint/history", {
+  const response = await fetch(`${API_BASE_URL}/api/footprint/history`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -55,7 +57,7 @@ export async function getFootprintComparison(
   total: number,
   token: string,
 ): Promise<ComparisonResult> {
-  const response = await fetch(`/api/footprint/comparison?total=${total}`, {
+  const response = await fetch(`${API_BASE_URL}/api/footprint/comparison?total=${total}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -73,7 +75,7 @@ export async function sendChatMessage(
   history: ChatMessage[],
   footprint: FootprintResult,
 ): Promise<string> {
-  const response = await fetch("/api/coach/chat", {
+  const response = await fetch(`${API_BASE_URL}/api/coach/chat`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -88,6 +90,3 @@ export async function sendChatMessage(
   const data = await response.json() as { reply: string };
   return data.reply;
 }
-
-
-
