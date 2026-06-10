@@ -17,17 +17,34 @@ try:
     import firebase_admin
     from firebase_admin import auth, credentials, firestore
 
-    # Check if service account file is specified and exists
+    # Check if service account file is specified (could be JSON string or file path)
     service_account_path = settings.firebase_service_account
-    if service_account_path and os.path.exists(service_account_path):
-        cred = credentials.Certificate(service_account_path)
-        firebase_admin.initialize_app(cred)
-        db_client = firestore.client()
-        MOCK_MODE = False
-        logger.info("Firebase Admin initialized successfully in production mode.")
+    if service_account_path:
+        if service_account_path.strip().startswith("{"):
+            try:
+                service_account_info = json.loads(service_account_path)
+                cred = credentials.Certificate(service_account_info)
+                firebase_admin.initialize_app(cred)
+                db_client = firestore.client()
+                MOCK_MODE = False
+                logger.info("Firebase Admin initialized successfully using JSON env variable.")
+            except Exception as e:
+                logger.warning(
+                    f"Failed to initialize Firebase Admin from JSON string ({e}). EcoCoach will run in Local Developer Mock Mode."
+                )
+        elif os.path.exists(service_account_path):
+            cred = credentials.Certificate(service_account_path)
+            firebase_admin.initialize_app(cred)
+            db_client = firestore.client()
+            MOCK_MODE = False
+            logger.info("Firebase Admin initialized successfully from file path.")
+        else:
+            logger.warning(
+                f"Firebase service account path '{service_account_path}' not found. EcoCoach will run in Local Developer Mock Mode."
+            )
     else:
         logger.warning(
-            "Firebase service account credentials not found. EcoCoach will run in Local Developer Mock Mode."
+            "Firebase service account credentials not configured. EcoCoach will run in Local Developer Mock Mode."
         )
 except Exception as e:
     logger.warning(
