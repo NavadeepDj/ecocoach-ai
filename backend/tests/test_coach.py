@@ -5,6 +5,8 @@ from app.services.coach import CoachService
 
 
 def test_offline_coach_keyword_matching() -> None:
+    from unittest.mock import patch
+
     footprint = {
         "total": 350.0,
         "largest_category": "electricity",
@@ -16,20 +18,22 @@ def test_offline_coach_keyword_matching() -> None:
         }
     }
 
-    # Test transport keyword response
-    reply_transport = CoachService.chat([{"role": "user", "text": "Tell me about my car commute"}], footprint)
-    assert "transport emissions are 100.0" in reply_transport
+    with patch("app.services.coach._gemini_client", None):
+        # Test transport keyword response
+        reply_transport = CoachService.chat([{"role": "user", "text": "Tell me about my car commute"}], footprint)
+        assert "transport emissions are 100.0" in reply_transport
 
-    # Test electricity keyword response
-    reply_elec = CoachService.chat([{"role": "user", "text": "how to save power?"}], footprint)
-    assert "electricity emissions are 150.0" in reply_elec
+        # Test electricity keyword response
+        reply_elec = CoachService.chat([{"role": "user", "text": "how to save power?"}], footprint)
+        assert "electricity emissions are 150.0" in reply_elec
 
-    # Test general fallback response
-    reply_general = CoachService.chat([{"role": "user", "text": "hello coach"}], footprint)
-    assert "biggest category is 'electricity'" in reply_general
+        # Test general fallback response
+        reply_general = CoachService.chat([{"role": "user", "text": "hello coach"}], footprint)
+        assert "biggest category is 'electricity'" in reply_general
 
 
 def test_coach_chat_api_endpoint() -> None:
+    from unittest.mock import patch
     client = TestClient(app)
     payload = {
         "history": [
@@ -56,10 +60,11 @@ def test_coach_chat_api_endpoint() -> None:
         }
     }
 
-    response = client.post("/api/coach/chat", json=payload)
-    assert response.status_code == 200
-    assert "reply" in response.json()
-    assert "waste emissions are 30.0" in response.json()["reply"]
+    with patch("app.services.coach._gemini_client", None):
+        response = client.post("/api/coach/chat", json=payload)
+        assert response.status_code == 200
+        assert "reply" in response.json()
+        assert "waste emissions are 30.0" in response.json()["reply"]
 
 
 def test_online_coach_with_mock() -> None:
