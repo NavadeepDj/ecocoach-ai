@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/api.ts","./src/firebase.ts","./src/main.tsx","./src/types.ts","./src/vite-env.d.ts"],"version":"5.7.3"}
+{"root":["./src/app.tsx","./src/api.ts","./src/firebase.ts","./src/main.tsx","./src/types.ts","./src/vite-env.d.ts","./src/components/chatassistant.tsx","./src/components/dashboard.tsx","./src/components/header.tsx","./src/components/historymodal.tsx","./src/components/questionnaire.tsx"],"version":"5.7.3"}
