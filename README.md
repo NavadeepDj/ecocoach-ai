@@ -93,11 +93,4 @@ docs/      Product plan, architecture decisions, and calculation methodology
 
 ---
 
-## Submission & Quality Standards
-
-This project has been optimized and audited against key quality metrics:
-1. **Security**: Zero credentials in Git (strict `.gitignore` rules), sanitised authentication errors, strict input validation using Pydantic Literal types, and bounded chat histories to prevent prompt injection and API resource exhaustion.
-2. **Code Quality**: Completely modular React components, clean separation of concern, typed Firebase variables, and top-level module imports.
-3. **Efficiency**: Cached Gemini clients and clean subcollection queries for Firestore distribution stats.
-4. **Testing**: 100% test coverage of API endpoints, mock Firebase environments, recommendation logic edge cases, boundaries, input validation, and fallback paths.
-5. **Accessibility**: Skip links, ARIA labels, roles, and full keyboard control (Tab + Enter/Space) for interactive recommendation cards.
+# Open for Contributions
