@@ -27,8 +27,8 @@ else:
         "ECOCOACH_GEMINI_API_KEY not configured. Coach running in Offline Mode."
     )
 
-# Model to use for chat completions
-_GEMINI_MODEL = "gemini-2.0-flash"
+# Model hierarchy to try in order of preference (primary and backups)
+_GEMINI_MODELS = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro"]
 
 # Maximum number of prior messages forwarded to Gemini (cost-guard)
 _MAX_HISTORY_TURNS = 20
@@ -45,7 +45,7 @@ class CoachService:
         """Process a chat conversation and return the coach's reply.
 
         Uses the Gemini API when available; falls back to deterministic
-        keyword-matching when the API key is missing or the call fails.
+        keyword-matching when the API key is missing or all configured models fail.
         """
         if not history:
             return (
@@ -92,17 +92,33 @@ class CoachService:
                     types.Content(role=role, parts=[types.Part.from_text(text=msg["text"])])
                 )
 
-            chat = _gemini_client.chats.create(
-                model=_GEMINI_MODEL,
-                config=types.GenerateContentConfig(
-                    system_instruction=system_prompt,
-                ),
-                history=gemini_history,
-            )
-            response = chat.send_message(trimmed[-1]["text"])
-            return response.text
+            # Try models in order of preference
+            last_exc = None
+            for model_name in _GEMINI_MODELS:
+                try:
+                    chat = _gemini_client.chats.create(
+                        model=model_name,
+                        config=types.GenerateContentConfig(
+                            system_instruction=system_prompt,
+                        ),
+                        history=gemini_history,
+                    )
+                    response = chat.send_message(trimmed[-1]["text"])
+                    return response.text
+                except Exception as exc:
+                    logger.warning(
+                        "Gemini chat failed with model %s (%s). Trying next backup model...",
+                        model_name,
+                        exc,
+                    )
+                    last_exc = exc
+                    continue
+
+            # If all models failed, raise the last encountered error to trigger offline fallback
+            if last_exc:
+                raise last_exc
         except Exception as exc:
-            logger.error("Gemini chat failed: %s. Falling back to offline.", exc)
+            logger.error("All Gemini models failed: %s. Falling back to offline.", exc)
             return CoachService._get_offline_response(latest_user_message, footprint)
 
     # ------------------------------------------------------------------

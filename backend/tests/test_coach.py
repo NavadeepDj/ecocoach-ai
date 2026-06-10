@@ -111,3 +111,41 @@ def test_online_coach_graceful_fallback_on_error() -> None:
         reply = CoachService.chat([{"role": "user", "text": "how to save power?"}], footprint)
         assert "electricity emissions are 150.0" in reply
 
+
+def test_online_coach_model_fallback() -> None:
+    from unittest.mock import MagicMock, patch
+
+    footprint = {
+        "total": 350.0,
+        "largest_category": "electricity",
+        "breakdown": {
+            "transport": 100.0,
+            "electricity": 150.0,
+            "food": 80.0,
+            "waste": 20.0
+        }
+    }
+    
+    mock_client = MagicMock()
+    
+    # First model call raises an exception, second succeeds
+    mock_chat = MagicMock()
+    mock_response = MagicMock()
+    mock_response.text = "Second model fallback response"
+    mock_chat.send_message.return_value = mock_response
+
+    # Define side effect to raise error on first model call and succeed on second
+    def side_effect(model, config, history):
+        if model == "gemini-2.0-flash":
+            raise Exception("Model overloaded")
+        return mock_chat
+
+    mock_client.chats.create.side_effect = side_effect
+    
+    with patch("app.services.coach._gemini_client", mock_client):
+        reply = CoachService.chat([{"role": "user", "text": "What do you think of my footprint?"}], footprint)
+        assert reply == "Second model fallback response"
+        # Assert chats.create was called for both primary and secondary model
+        assert mock_client.chats.create.call_count == 2
+
+
