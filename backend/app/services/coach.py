@@ -28,7 +28,12 @@ else:
     )
 
 # Model hierarchy to try in order of preference (primary and backups)
-_GEMINI_MODELS = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro"]
+_GEMINI_MODELS = [
+    "gemini-3.5-flash",
+    "gemini-3.1-pro",
+    "gemini-2.5-flash",
+    "gemini-2.0-flash"
+]
 
 # Maximum number of prior messages forwarded to Gemini (cost-guard)
 _MAX_HISTORY_TURNS = 20

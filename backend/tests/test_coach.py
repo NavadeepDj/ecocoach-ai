@@ -136,7 +136,7 @@ def test_online_coach_model_fallback() -> None:
 
     # Define side effect to raise error on first model call and succeed on second
     def side_effect(model, config, history):
-        if model == "gemini-2.0-flash":
+        if model == "gemini-3.5-flash":
             raise Exception("Model overloaded")
         return mock_chat
 
